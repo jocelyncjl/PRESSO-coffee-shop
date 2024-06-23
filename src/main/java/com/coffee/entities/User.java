@@ -5,21 +5,42 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
+/*
+* The User entity class, representing a user in the coffee shop application.
+* It is mapped to the "users" table in the database.
+*
+* */
 @Entity(name = "users")
 public class User {
+
+    // The unique identifier of the user. It is generated automatically using the IDENTITY strategy.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
+
+    // The username of the user, which must be unique
     @Column(unique = true)
     private String userName;
+
+    // The password of the user
     private String userPassword;
+
+    // The email address of the user
     private String email;
+
+    // The phone number of the user
     private String phone;
+
+    // The address of the user
     private String address;
+
+    // The date and time when the user registered
     private LocalDateTime registrationDate;
+
+    // The number of points the user has accumulated
     private BigDecimal points;
 
+    // Getters and Setters
     public Integer getUserId(){
         return userId;
     }
@@ -84,6 +105,7 @@ public class User {
         this.points = points;
     }
 
+    // Constructors
     public User() {
     }
 
