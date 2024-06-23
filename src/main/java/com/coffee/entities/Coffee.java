@@ -34,15 +34,11 @@ public class Coffee {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "quantity")
-    private int quantity;
-
-
     // Constructors
     public Coffee() {
     }
 
-    public Coffee(String coffeeId, String coffeeName, String coffeeDescription, double price, String category, LocalDateTime createdAt, LocalDateTime updatedAt, int quantity) {
+    public Coffee(String coffeeId, String coffeeName, String coffeeDescription, double price, String category, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.coffeeId = coffeeId;
         this.coffeeName = coffeeName;
         this.coffeeDescription = coffeeDescription;
@@ -50,7 +46,6 @@ public class Coffee {
         this.category = category;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.quantity = quantity;
     }
 
     // Getters and setters
@@ -110,11 +105,4 @@ public class Coffee {
         this.updatedAt = updatedAt;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }

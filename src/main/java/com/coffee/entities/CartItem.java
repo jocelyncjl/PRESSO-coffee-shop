@@ -2,36 +2,27 @@ package com.coffee.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 
-@Entity(name = "cart_items")
-public class CartItem {
+@Entity(name = "order_details")
+public class CartItem{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // The coffee item in the cart
     @ManyToOne
-    @JoinColumn(name = "coffee_id")
-    private Coffee coffee;
-
-    // The cart that this item belongs to
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Cart cart;
 
-    // The quantity of the coffee item in the cart
-    @Column(name = "quantity")
-    private Integer quantity;
+    @ManyToOne
+    @JoinColumn(name = "coffee_id", nullable = false)
+    private Coffee coffee;
 
-    // Default constructor
-    public CartItem() {
-    }
+    @Column(nullable = false)
+    private int quantity;
 
-    // Constructor that takes coffee and quantity
-    public CartItem(Coffee coffee, Integer quantity) {
-        this.coffee = coffee;
-        this.quantity = quantity;
-    }
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
     // Getters and setters
     public Long getId() {
@@ -42,14 +33,6 @@ public class CartItem {
         this.id = id;
     }
 
-    public Coffee getCoffee() {
-        return coffee;
-    }
-
-    public void setCoffee(Coffee coffee) {
-        this.coffee = coffee;
-    }
-
     public Cart getCart() {
         return cart;
     }
@@ -58,11 +41,28 @@ public class CartItem {
         this.cart = cart;
     }
 
-    public Integer getQuantity() {
+    public Coffee getCoffee() {
+        return coffee;
+    }
+
+    public void setCoffee(Coffee coffee) {
+        this.coffee = coffee;
+    }
+
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
 }

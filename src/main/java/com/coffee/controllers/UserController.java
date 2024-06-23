@@ -51,7 +51,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestParam("username") String userName,@RequestParam("password") String password){
         Optional<User> optionalUser = userService.login(userName,password);
-        return optionalUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
+        return optionalUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
 
     }
 

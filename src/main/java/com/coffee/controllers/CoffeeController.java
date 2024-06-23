@@ -1,56 +1,47 @@
 package com.coffee.controllers;
 
-import com.coffee.entities.Cart;
 import com.coffee.entities.Coffee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import services.CartService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import services.CoffeeService;
-import services.OrderService;
 
-import java.util.List;
 import java.util.Optional;
 
+/**
+ * The CoffeeController class, which handles the HTTP requests related to coffee products.
+ */
 @RestController
 @RequestMapping("/api/coffees")
-public class CoffeeController {
+public class CoffeeController{
+    /**
+     * The CoffeeService instance, used for performing service-level operations on coffee products.
+     */
     private final CoffeeService coffeeService;
-    private final CartService cartService;
-    private final OrderService orderService;
 
-
+    /**
+     * Constructor that injects the required CoffeeService dependency.
+     * @param coffeeService the CoffeeService instance
+     */
     @Autowired
-    public CoffeeController(CoffeeService coffeeService, CartService cartService, OrderService orderService) {
+    public CoffeeController(CoffeeService coffeeService) {
         this.coffeeService = coffeeService;
-        this.cartService = cartService;
-        this.orderService = orderService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Coffee>> getAllCoffees() {
-        List<Coffee> coffees = coffeeService.getAllCoffees();
-        return new ResponseEntity<>(coffees, HttpStatus.OK);
-    }
-
+    /**
+     * Retrieves a coffee product by its unique identifier.
+     * @param id the unique identifier of the coffee product
+     * @return a ResponseEntity containing the coffee product, or a 404 NOT FOUND response if not found
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<Coffee> getCoffeeById(@PathVariable("id") String coffeeId) {
-        Optional<Coffee> optionalCoffee = coffeeService.getCoffeeById(coffeeId);
-        return optionalCoffee.map(coffee -> new ResponseEntity<>(coffee, HttpStatus.OK))
+    public ResponseEntity<Coffee> getCoffeeById(@PathVariable String id) {
+        Optional<Coffee> coffee = coffeeService.getCoffeeById(id);
+        return coffee.map(c -> new ResponseEntity<>(c, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("/cart")
-    public ResponseEntity<Cart> addToCart(@RequestBody Cart cart) {
-        Cart updatedCart = cartService.addToCart(cart);
-        return new ResponseEntity<>(updatedCart, HttpStatus.OK);
-    }
-
-    @PostMapping("/order")
-    public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
-        Order placedOrder = orderService.placeOrder(order);
-        return new ResponseEntity<>(placedOrder, HttpStatus.CREATED);
     }
 
 }
