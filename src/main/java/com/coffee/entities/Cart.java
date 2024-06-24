@@ -12,7 +12,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private Long orderId;
+    private int orderId;
 
     // The user who owns this cart
     @ManyToOne
@@ -51,11 +51,11 @@ public class Cart {
     }
 
     // Getters and setters
-    public Long getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
