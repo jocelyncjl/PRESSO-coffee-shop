@@ -1,5 +1,6 @@
 package com.coffee.controllers;
 
+import com.coffee.entities.Gift;
 import com.coffee.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,4 +69,15 @@ public class UserController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
+
+    @PostMapping("/{userId}/points")
+    public void addPoints(@PathVariable User user, @RequestParam double points) {
+        userService.addPoints(user, points);
+    }
+
+    @PostMapping("/{userId}/redeem")
+    public void redeemGift(@PathVariable User user, @RequestParam Gift gift) {
+        userService.redeemGift(user, gift);
+    }
+
 }

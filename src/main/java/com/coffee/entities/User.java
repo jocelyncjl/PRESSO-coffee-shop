@@ -40,6 +40,7 @@ public class User {
     // The number of points the user has accumulated
     private BigDecimal points;
 
+
     // Getters and Setters
     public Integer getUserId(){
         return userId;
@@ -117,5 +118,8 @@ public class User {
         this.address = address;
         this.registrationDate = LocalDateTime.now();
         this.points = BigDecimal.ZERO;
+    }
+
+    public User(String username) {
     }
 }

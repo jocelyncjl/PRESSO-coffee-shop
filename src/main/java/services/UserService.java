@@ -1,11 +1,17 @@
 package services;
 
+import com.coffee.entities.Gift;
+import com.coffee.entities.UserGift;
+import com.coffee.repositories.GiftRepository;
+import com.coffee.repositories.UserGiftRepository;
 import com.coffee.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.coffee.entities.User;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -21,6 +27,10 @@ public class UserService {
      */
     private final UserRepository userRepository;
 
+    private final UserGiftRepository userGiftRepository;
+
+    private final GiftRepository giftRepository;
+
     /**
      * The BCryptPasswordEncoder instance, used for password hashing and verification.
      */
@@ -33,8 +43,10 @@ public class UserService {
      */
 
     @Autowired
-    public UserService(UserRepository userRepository,BCryptPasswordEncoder bCryptPasswordEncoder){
+    public UserService(UserRepository userRepository, UserGiftRepository userGiftRepository, GiftRepository giftRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository = userRepository;
+        this.userGiftRepository = userGiftRepository;
+        this.giftRepository = giftRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
@@ -81,4 +93,41 @@ public class UserService {
         }
         return Optional.empty();
     }
+
+    public void addPoints(User user, double points){
+        BigDecimal newPoints = user.getPoints().add(BigDecimal.valueOf(points));
+        userRepository.save(user);
+
+    }
+
+
+    public boolean redeemGift(User user, Gift gift){
+        if (user.getPoints().compareTo(gift.getPointsRequired()) >= 0 && gift.getStock() > 0){
+            UserGift userGift = new UserGift();
+            userGift.setUser(user);
+            userGift.setGift(gift);
+            userGift.setQuantity(1);
+
+            Timestamp redeemedAt = Timestamp.valueOf(LocalDateTime.now());
+            userGift.setRedeemedAt(redeemedAt);
+            userGiftRepository.save(userGift);
+
+            user.setPoints(user.getPoints().subtract(gift.getPointsRequired()));
+            gift.setStock(gift.getStock() - 1);
+            userRepository.save(user);
+            giftRepository.save(gift);
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
 }
