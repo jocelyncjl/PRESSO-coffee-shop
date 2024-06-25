@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The `OrderService` class provides methods for managing orders for coffee products.
+ */
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
@@ -22,6 +25,12 @@ public class OrderService {
         this.cartService = cartService;
     }
 
+    /**
+     * Creates a new `Order` for the specified `User`.
+     *
+     * @param user  The user for whom the order is being created.
+     * @return      The created `Order` entity.
+     */
     public Order createOrder(User user){
         Cart cart = cartService.createCart(user);
         Order order = new Order();
@@ -33,10 +42,22 @@ public class OrderService {
 
     }
 
+    /**
+     * Retrieves the order history for the specified `User`.
+     *
+     * @param userId  The ID of the user for whom to retrieve the order history.
+     * @return        A list of `Order` entities for the specified user.
+     */
     public List<Order> getOrderHistory(Long userId) {
         return orderRepository.findByUserId(userId);
     }
 
+    /**
+     * Calculates the total amount for the specified `Cart`.
+     *
+     * @param cart  The `Cart` for which to calculate the total amount.
+     * @return      The total amount as a `BigDecimal`.
+     */
     private BigDecimal calculateTotalAmount(Cart cart) {
         // Calculate the total amount based on the items in the cart
         return new BigDecimal(0);

@@ -1,6 +1,8 @@
 package com.coffee.repositories;
 
 import com.coffee.entities.Coffee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -41,5 +43,35 @@ public interface CoffeeRepository extends JpaRepository<Coffee,String> {
 
     boolean existsByName(String name);
 
+    /**
+     * Finds a paginated list of Coffees where the name contains the given keyword.
+     *
+     * @param keyword  the keyword to search for in the Coffee name
+     * @param pageable the pagination information (page number, size, sorting, etc.)
+     * @return a Page object containing the matching Coffees
+     */
+    Page<Coffee> findByNameContaining(String keyword, Pageable pageable);
+
+    /**
+     * Finds a paginated list of Coffees where the price is between the given minimum and maximum values.
+     *
+     * @param minPrice the minimum price to include in the results
+     * @param maxPrice the maximum price to include in the results
+     * @param pageable the pagination information (page number, size, sorting, etc.)
+     * @return a Page object containing the matching Coffees
+     */
+
+    Page<Coffee> findByPriceBetween(Integer minPrice, Integer maxPrice, Pageable pageable);
+
+    /**
+     * Finds a paginated list of Coffees where the name contains the given keyword and the price is between the given minimum and maximum values.
+     *
+     * @param keyword  the keyword to search for in the Coffee name
+     * @param minPrice the minimum price to include in the results
+     * @param maxPrice the maximum price to include in the results
+     * @param pageable the pagination information (page number, size, sorting, etc.)
+     * @return a Page object containing the matching Coffees
+     */
+    Page<Coffee> findByNameContainingAndPriceBetween(String keyword, Integer minPrice, Integer maxPrice, Pageable pageable);
 
 }

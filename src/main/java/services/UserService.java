@@ -94,13 +94,26 @@ public class UserService {
         return Optional.empty();
     }
 
+    /**
+     * Adds the specified number of points to the user's account.
+     *
+     * @param user    The user whose points are being updated.
+     * @param points  The number of points to be added to the user's account.
+     */
     public void addPoints(User user, double points){
         BigDecimal newPoints = user.getPoints().add(BigDecimal.valueOf(points));
+        user.setPoints(newPoints);
         userRepository.save(user);
 
     }
 
-
+    /**
+     * Redeems the specified gift for the given user, if the user has enough points and the gift is in stock.
+     *
+     * @param user  The user redeeming the gift.
+     * @param gift  The gift being redeemed.
+     * @return      True if the gift was successfully redeemed, false otherwise.
+     */
     public boolean redeemGift(User user, Gift gift){
         if (user.getPoints().compareTo(gift.getPointsRequired()) >= 0 && gift.getStock() > 0){
             UserGift userGift = new UserGift();
@@ -120,14 +133,4 @@ public class UserService {
         }
         return false;
     }
-
-
-
-
-
-
-
-
-
-
 }
