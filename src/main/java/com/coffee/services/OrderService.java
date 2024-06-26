@@ -1,4 +1,4 @@
-package services;
+package com.coffee.services;
 
 import com.coffee.entities.Cart;
 import com.coffee.entities.Order;

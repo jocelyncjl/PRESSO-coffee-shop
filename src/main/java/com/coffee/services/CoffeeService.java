@@ -1,4 +1,4 @@
-package services;
+package com.coffee.services;
 
 import com.coffee.entities.Coffee;
 import com.coffee.repositories.CoffeeRepository;

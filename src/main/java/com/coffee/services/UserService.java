@@ -1,4 +1,4 @@
-package services;
+package com.coffee.services;
 
 import com.coffee.entities.Gift;
 import com.coffee.entities.UserGift;
