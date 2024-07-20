@@ -20,26 +20,26 @@ public class User {
 
     // The username of the user, which must be unique
     @Column(unique = true)
-    private String userName;
+    private String name;
 
     // The password of the user
-    private String userPassword;
+    @Column
+    private String password;
 
     // The email address of the user
+    @Column
     private String email;
 
+    @Column
+    private int age;
+
     // The phone number of the user
+    @Column
     private String phone;
 
     // The address of the user
+    @Column
     private String address;
-
-    // The date and time when the user registered
-    private LocalDateTime registrationDate;
-
-    // The number of points the user has accumulated
-    private BigDecimal points;
-
 
     // Getters and Setters
     public Integer getUserId(){
@@ -51,19 +51,19 @@ public class User {
     }
 
     public String getUserName(){
-        return userName;
+        return name;
     }
 
-    public void setUserName(String userName){
-        this.userName = userName;
+    public void setUserName(String name){
+        this.name = name;
     }
 
     public String getUserPassword() {
-        return userPassword;
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setUserPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -72,6 +72,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getPhone() {
@@ -90,34 +97,18 @@ public class User {
         this.address = address;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public BigDecimal getPoints() {
-        return points;
-    }
-
-    public void setPoints(BigDecimal points) {
-        this.points = points;
-    }
 
     // Constructors
     public User() {
     }
 
-    public User(String userName, String userPassword, String email, String phone, String address) {
-        this.userName = userName;
-        this.userPassword = userPassword;
+    public User(String name, String password, String email,int age, String phone, String address) {
+        this.name = name;
+        this.password = password;
         this.email = email;
+        this.age = age;
         this.phone = phone;
         this.address = address;
-        this.registrationDate = LocalDateTime.now();
-        this.points = BigDecimal.ZERO;
     }
 
     public User(String username) {

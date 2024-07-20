@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     * @param username the username of the user to find
     * @return an Optional containing the User if found, or an empty Optional if not found
     * */
-    Optional<User> findByUsername(String username);
+    Optional<User> findByName(String name);
 
     /**
      * Finds a User by their email address.

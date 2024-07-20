@@ -57,27 +57,4 @@ public class UserController {
 
     }
 
-    /**
-     * Updates a user's profile.
-     * @param user the user with the updated profile information
-     * @return a ResponseEntity containing the updated user and a status of OK, or a status of NOT_FOUND if the update fails
-     */
-    @PutMapping("/update")
-    public ResponseEntity<User> updateUserProfile(@RequestBody User user){
-        Optional<User> optionalUser = userService.updateUserProfile(user);
-        return optionalUser.map(updatedUser -> new ResponseEntity<>(updatedUser, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-
-    }
-
-    @PostMapping("/{userId}/points")
-    public void addPoints(@PathVariable User user, @RequestParam double points) {
-        userService.addPoints(user, points);
-    }
-
-    @PostMapping("/{userId}/redeem")
-    public void redeemGift(@PathVariable User user, @RequestParam Gift gift) {
-        userService.redeemGift(user, gift);
-    }
-
 }

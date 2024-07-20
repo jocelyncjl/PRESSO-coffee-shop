@@ -2,9 +2,11 @@ package com.coffee.services;
 
 import com.coffee.entities.Gift;
 import com.coffee.entities.UserGift;
+import com.coffee.mapper.UserMapper;
 import com.coffee.repositories.GiftRepository;
 import com.coffee.repositories.UserGiftRepository;
 import com.coffee.repositories.UserRepository;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.coffee.entities.User;
@@ -22,14 +24,11 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    /**
-     * The UserRepository instance, used for interacting with the user data.
-     */
+    @Resource
+    private UserMapper userMapper;
+
     private final UserRepository userRepository;
 
-    private final UserGiftRepository userGiftRepository;
-
-    private final GiftRepository giftRepository;
 
     /**
      * The BCryptPasswordEncoder instance, used for password hashing and verification.
@@ -43,10 +42,8 @@ public class UserService {
      */
 
     @Autowired
-    public UserService(UserRepository userRepository, UserGiftRepository userGiftRepository, GiftRepository giftRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository = userRepository;
-        this.userGiftRepository = userGiftRepository;
-        this.giftRepository = giftRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
@@ -58,79 +55,23 @@ public class UserService {
      */
     public User registerUser(User user){
         user.setUserPassword(bCryptPasswordEncoder.encode(user.getUserPassword()));
-        user.setRegistrationDate(LocalDateTime.now());
-        return userRepository.save(user);
+        //return userRepository.save(user);
+        userMapper.insert(user);
+        return user;
     }
 
     /**
      * Logs in a user.
-     * @param userName the username of the user
+     * @param name the username of the user
      * @param password the password of the user
      * @return an Optional containing the user if the login is successful, or an empty Optional if the login fails
      */
-    public Optional<User> login(String userName,String password){
-        Optional<User> optionalUser = userRepository.findByUsername(userName);
+    public Optional<User> login(String name,String password){
+        Optional<User> optionalUser = userRepository.findByName(name);
         if (optionalUser.isPresent() && bCryptPasswordEncoder.matches(password,optionalUser.get().getUserPassword())){
             return optionalUser;
         }
         return Optional.empty();
     }
 
-    /**
-     * Updates the user's profile.
-     * @param user the user with the updated profile information
-     * @return an Optional containing the updated user if the update is successful, or an empty Optional if the update fails
-     */
-    public Optional<User> updateUserProfile(User user){
-        Optional<User> optionalUser = userRepository.findById(user.getUserId());
-        if (optionalUser.isPresent()){
-            User updatedUser = optionalUser.get();
-            updatedUser.setUserName(user.getUserName());
-            updatedUser.setEmail(user.getEmail());
-            updatedUser.setPhone(user.getPhone());
-            updatedUser.setAddress(user.getAddress());
-            return Optional.of(userRepository.save(updatedUser));
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Adds the specified number of points to the user's account.
-     *
-     * @param user    The user whose points are being updated.
-     * @param points  The number of points to be added to the user's account.
-     */
-    public void addPoints(User user, double points){
-        BigDecimal newPoints = user.getPoints().add(BigDecimal.valueOf(points));
-        user.setPoints(newPoints);
-        userRepository.save(user);
-
-    }
-
-    /**
-     * Redeems the specified gift for the given user, if the user has enough points and the gift is in stock.
-     *
-     * @param user  The user redeeming the gift.
-     * @param gift  The gift being redeemed.
-     * @return      True if the gift was successfully redeemed, false otherwise.
-     */
-    public boolean redeemGift(User user, Gift gift){
-        if (user.getPoints().compareTo(gift.getPointsRequired()) >= 0 && gift.getStock() > 0){
-            UserGift userGift = new UserGift();
-            userGift.setUser(user);
-            userGift.setGift(gift);
-            userGift.setQuantity(1);
-
-            Timestamp redeemedAt = Timestamp.valueOf(LocalDateTime.now());
-            userGift.setRedeemedAt(redeemedAt);
-            userGiftRepository.save(userGift);
-
-            user.setPoints(user.getPoints().subtract(gift.getPointsRequired()));
-            gift.setStock(gift.getStock() - 1);
-            userRepository.save(user);
-            giftRepository.save(gift);
-            return true;
-        }
-        return false;
-    }
 }
